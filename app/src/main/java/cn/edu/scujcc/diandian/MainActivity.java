@@ -4,20 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity
-    implements ChannelRvAdapter.ChannelClickListener{
+public class MainActivity extends AppCompatActivity{
+    //implements ChannelRvAdapter.ChannelClickListener{
     private ChannelRvAdapter rvAdapter;
     private RecyclerView channelRv;
     private ChannelLab lab = ChannelLab.getInstance();
+    //线程通讯第1步，在主线程创建Handler
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg){
+            if (msg.what == 1){
+                rvAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 
 
     @Override
@@ -26,6 +32,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         this.channelRv = findViewById(R.id.channel_rv);
+
+
         //ChannelRvAdapter rvAdapter = new ChannelRvAdapter(this);
         rvAdapter = new ChannelRvAdapter(this,p -> {
             Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
@@ -35,12 +43,12 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         });
 
-        initData();
+        //initData();
         this.channelRv.setAdapter(rvAdapter);
         this.channelRv.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    @Override
+   /* @Override
     public void onChannelClick(int position) {
         Log.d("DianDian", "用户点击的频道编号是：" + position);
         Channel c = lab.getChannel(position);
@@ -60,11 +68,12 @@ public class MainActivity extends AppCompatActivity
             }
         };
         lab.getData(handler);
-    }
+    }*/
+   @Override
     protected void onResume(){
         super.onResume();
 
-        //lab.getData(handler);
+        lab.getData(handler);
     }
 }
 

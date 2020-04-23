@@ -30,9 +30,9 @@ public class ChannelLab {
         return INSTANCE;
     }
 
-    public void setData(List<Channel> newData){
-        this.data=newData;
-    }
+   // public void setData(List<Channel> newData){
+   //     this.data=newData;
+   // }
 //引入网络前的项目
     /*public void test(){
         data = new ArrayList<>();
@@ -63,12 +63,12 @@ public class ChannelLab {
 
 //获取指定频道
     public Channel getChannel(int position){
-        return data.get(position);
+        return this.data.get(position);
     }
 
 
     public void getData(Handler handler){
-        Retrofit retrofit = RetrofitClient.get();
+        Retrofit retrofit = RetrofitClient.getRetrofit();
         //Retrofit retrofit = new Retrofit.Builder().baseUrl("http://47.112.225.217:8080").addConverterFactory(MoshiConverterFactory.create()).build();
         ChannelApi api = retrofit.create(ChannelApi.class);
         Call<List<Channel>> call = api.getAllChannels();
@@ -78,9 +78,11 @@ public class ChannelLab {
                 if (null != response && null != response.body()){
                 Log.d("DianDian","网络访问成功，从阿里云得到的数据是：");
                 Log.d("DianDian",response.body().toString());
+                data = response.body();
 
                 Message msg = new Message();
-                msg.obj = response.body();
+                msg.what = 1;
+                //msg.obj = response.body();
                 handler.sendMessage(msg);
             }else {
                 Log.w("DianDian","response没有数据！");

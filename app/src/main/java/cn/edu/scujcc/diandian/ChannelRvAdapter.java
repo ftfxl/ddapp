@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 
 public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.ChannelRowHolder> {
 
@@ -52,6 +51,7 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
     public void onBindViewHolder(@NonNull ChannelRowHolder holder, int position) {
 
         Channel c = lab.getChannel(position);
+        holder.bind(c);
         //c.setCover(R.drawable.a);
 
 
@@ -62,10 +62,12 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
         //c.setTitle("中央"+position+"台");
         //c.setQuality("1080p");
         //c.setCover(R.drawable.a);
-        holder.bind(c);
+        //holder.bind(c);
         //TODO
         //holder.bind("中央1台","1080p",R.drawable.a);
     }
+
+
 
     /**
      * 单行布局对应的java控制类
@@ -101,8 +103,9 @@ public class ChannelRvAdapter extends RecyclerView.Adapter<ChannelRvAdapter.Chan
         public void bind(Channel c) {
             this.title.setText(c.getTitle());
             this.quality.setText(c.getQuality());
-            RoundedCorners rc = new RoundedCorners(6);
+            //RoundedCorners rc = new RoundedCorners(6);
 
+            Log.d("DianDian",c.getTitle()+":准备从网络加载封面："+c.getCover());
             Glide.with(context).load(c.getCover()).placeholder(R.drawable.a).into(this.cover);
            // this.cover.setImageResource(c.getCover());
         }
